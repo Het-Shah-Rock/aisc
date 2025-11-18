@@ -1,0 +1,57 @@
+male(iqbal).
+male(kaizar).
+male(kazim).
+male(mdv).
+male(ali).
+male(hasnain).
+male(hasan).
+male(hussain).
+female(izzat).
+female(asma).
+female(afiya).
+female(fatima).
+parent_of(iqbal, kaizar).
+parent_of(iqbal, kazim).
+parent_of(iqbal, mdv).
+parent_of(izzat, kaizar).
+parent_of(izzat, kazim).
+parent_of(izzat, mdv).
+parent_of(kaizar, hasnain).
+parent_of(kaizar, ali).
+parent_of(asma, hasnain).
+parent_of(asma, ali).
+parent_of(kazim, hussain).
+parent_of(fatima, hussain).
+parent_of(mdv, hasan).
+parent_of(afiya, hasan).
+/* Rules: These are relationships defined using the facts. */
+/* Parent/Child Relationships */
+
+
+father_of(X, Y) :- male(X), parent_of(X, Y).
+mother_of(X, Y) :- female(X), parent_of(X, Y).
+child_of(X, Y) :- parent_of(Y, X).
+/* Grandparent Relationships */
+grandfather_of(X, Y) :- male(X), parent_of(X, Z), parent_of(Z, Y).
+grandmother_of(X, Y) :- female(X), parent_of(X, Z), parent_of(Z, Y).
+/* Sibling Relationships */
+sister_of(X, Y) :- female(X), parent_of(P, X), parent_of(P, Y), X \= Y.
+brother_of(X, Y) :- male(X), parent_of(P, X), parent_of(P, Y), X \= Y.
+/* Aunt/Uncle Relationships */
+aunt_of(X, Y) :- female(X), parent_of(P, Y), sister_of(X, P).
+uncle_of(X, Y) :- male(X), parent_of(P, Y), brother_of(X, P).
+
+
+
+
+HANOI TOWER : 
+hanoi(N) :-
+ hanoi(N, left, middle, right).
+hanoi(0, _, _, _) :- !.
+hanoi(N, Source, Auxiliary, Target) :-
+ M is N - 1,
+ hanoi(M, Source, Target, Auxiliary),
+ move(Source, Auxiliary),
+ hanoi(M, Target, Auxiliary, Source).
+move(Source, Target) :-
+ format('Move disk from ~w to ~w~n', [Source, Target]).
